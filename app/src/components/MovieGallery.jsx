@@ -6,6 +6,7 @@ class MovieGallery extends Component {
   state = {
     movies: [],
     isLoading: false,
+    error: null,
   };
 
   componentDidMount() {
@@ -13,7 +14,7 @@ class MovieGallery extends Component {
   }
 
   fetchMovies = () => {
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true, error: null });
 
     fetch(`http://www.omdbapi.com/?apikey=e6e4260c&s=${this.props.searchQuery}`)
       .then((response) => {
@@ -28,7 +29,7 @@ class MovieGallery extends Component {
         }
       })
       .catch((err) => {
-        console.log("Errore nel recupero dei dati:", err.message);
+        this.setState({ error: err.message });
       })
       .finally(() => {
         this.setState({ isLoading: false });
@@ -39,16 +40,21 @@ class MovieGallery extends Component {
     return (
       <Container fluid className="px-5">
         <h4 className="text-white text-center mt-4">{this.props.title}</h4>
-        {this.state.caricamento && (
+        {this.state.isLoading && (
           <p className="text-white text-center">Caricamento...</p>
+        )}
+        {this.state.error && (
+          <p className="text-danger text-center">{this.state.error}</p>
         )}
 
         <Row className="row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-4">
-          {this.state.movies.map((movie) => (
-            <Col key={movie.imdbID}>
-              <MovieCard movie={movie} />
-            </Col>
-          ))}
+          {!this.state.isLoading &&
+            !this.state.error &&
+            this.state.movies.map((movie) => (
+              <Col key={movie.imdbID}>
+                <MovieCard movie={movie} />
+              </Col>
+            ))}
         </Row>
       </Container>
     );

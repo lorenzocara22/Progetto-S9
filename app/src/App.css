@@ -33,7 +33,6 @@
     animation: logo-spin infinite 20s linear;
   }
 }
-
 .movie-card {
   display: flex;
   flex-direction: column;
@@ -41,11 +40,14 @@
   justify-content: center;
   height: 100%;
   border: 2px solid transparent;
-  transition: border-color 0.3s ease-in-out;
+  transition: border-color 0.3s ease-in-out, transform 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
 }
 
 .movie-card:hover {
   border-color: #e50914;
+  transform: scale(1.05);
+  box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
 }
 
 .image-container {
